@@ -4,7 +4,11 @@ const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const routes = require('./routes/index.js');
 
+//* Configuración de la base de datos 
 require('./db.js');
+
+const initData = require('./controllers/temperamentController.js');
+initData();
 
 const server = express();
 
@@ -31,7 +35,7 @@ server.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
     const status = err.status || 500;
     const message = err.message || err;
     console.error(err);
-    res.status(status).send(message);
+    res.status(status).send({ msg: message });
 });
 
 module.exports = server;

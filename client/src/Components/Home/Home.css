@@ -1,0 +1,17 @@
+.container-slider {
+    /* background-image: url('../../Images/dog.png'); */
+    background-color: black;
+    /* background-repeat: no-repeat; */
+    /* background-size: cover; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 10px;
+    border: 2px solid orangered;
+    border-radius: 6px;
+    width: 70%;
+    height: 380px;
+    margin: 10px auto;
+    padding: 5px;
+}

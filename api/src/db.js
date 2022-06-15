@@ -44,42 +44,8 @@ const { Dog, Temperament, Dog_temperament } = sequelize.models;
 Dog.belongsToMany(Temperament, { through: Dog_temperament });
 Temperament.belongsToMany(Dog, { through: Dog_temperament });
 
-
-//* Carga inicial de la base de datos
-
-function getList(arrObjects) {
-    let arrayTemperaments = [];
-    let setTemperaments = {};
-
-    arrObjects.forEach(object => {
-        if (object.temperament) {
-            let array = object.temperament.split(', ');
-            arrayTemperaments = arrayTemperaments.concat(array);
-        }
-    });
-    setTemperaments = new Set(arrayTemperaments);
-    return [...setTemperaments];
-}
-
-async function getAllTemperaments() {
-    try {
-        const result = await axios.get('https://api.thedogapi.com/v1/breeds');
-        const list = getList(result.data);
-        list.forEach(async(item) => {
-            await Temperament.create({
-                name: item,
-                // name: 'Hola',
-            })
-        })
-    } catch (error) {
-        console.log(error.parent.detail);
-    }
-
-}
-
-getAllTemperaments();
-
 module.exports = {
     ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
     conn: sequelize, // para importart la conexión { conn } = require('./db.js');
+    // initData: getAllTemperaments,
 };

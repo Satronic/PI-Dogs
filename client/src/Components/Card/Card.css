@@ -1,0 +1,55 @@
+.card-link {
+    text-decoration: none;
+    color: black;
+}
+
+.card {
+    background-color: antiquewhite;
+    /* box-shadow: 1px 1px 15px white; */
+    border: 2px solid green;
+    border-radius: 6px;
+    width: 23%;
+    height: 170px;
+    margin: 5px;
+    cursor: pointer;
+    /* padding: 1px; */
+}
+
+.card:hover {
+    box-shadow: 1px 1px 15px orangered;
+    transform: scale(1.1);
+    border: 2px solid orangered;
+}
+
+.card-image {
+    width: 100px;
+    height: 75px;
+}
+
+.card-content {
+    background-color: #A5D6A7;
+    border-radius: 6px;
+    height: 52% !important;
+}
+
+.card-content-title {
+    background-color: green;
+    border-radius: 3px;
+    font-size: 15px;
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
+.card-content-title:hover {
+    background-color: orangered;
+}
+
+.card-content-detail,
+strong {
+    text-align: left;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    margin: 1px;
+}

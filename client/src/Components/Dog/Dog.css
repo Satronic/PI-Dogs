@@ -1,0 +1,85 @@
+.dog-container-main {
+    /* background-color: beige; */
+    padding: 10px;
+    margin: 10px auto;
+    width: 70%;
+}
+
+.dog-container {
+    /* background-color: darkgrey; */
+    box-shadow: 0 0 15px white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 2px solid green;
+    height: 100%;
+    color: white;
+    padding: 0;
+    margin: 0;
+}
+
+.dog-container-left {
+    /* background-color: yellow; */
+    border: 2px solid yellow;
+    border-radius: 10px;
+    width: 54%;
+    height: 400px;
+    margin: 1% 1% 1% 1%;
+}
+
+.dog-container-right {
+    /* background-color: yellow; */
+    border: 2px solid yellow;
+    border-radius: 10px;
+    width: 42%;
+    height: 400px;
+    margin: 1% 1% 1% 1%;
+}
+
+.dog-content-title {
+    /* background-color: green; */
+    background: green;
+    color: yellow;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    width: 98%;
+    padding: 1%;
+}
+
+.dog-image {
+    width: 540px;
+    height: 380px;
+    /* border: 3px solid yellow; */
+    border-radius: 10px;
+    margin: 10px;
+}
+
+.dog-content-detail,
+.dog-content-subtitle {
+    background-color: #FCF3CF;
+    color: orangered;
+    font-size: 22px;
+    text-align: left;
+    padding: 10px;
+    margin: 0;
+}
+
+.dog-content-detail {
+    border: 1px solid green;
+    margin: 10px;
+    border-radius: 10px;
+}
+
+.dog-content-subtitle {
+    color: green;
+}
+
+.dog-content-detail-title {
+    background-color: green;
+    color: white;
+    font-size: 24px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    padding: 10px;
+    margin: 0;
+}

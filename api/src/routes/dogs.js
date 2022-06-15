@@ -4,20 +4,25 @@ const { Dog, Temperament } = require('../db.js');
 
 const router = Router();
 
+// initData();
+
 router.get('/', async(req, res, next) => {
 
-    const { name } = req.query;
+    const { name, temperament } = req.query;
+    // console.log(name, temperament);
+    let dogsByName = [];
+    let dogsByTemperament = [];
 
     try {
         const resultAPI = await axios.get('https://api.thedogapi.com/v1/breeds');
         const resultBD = await Dog.findAll({ include: Temperament });
-        let dogsByName = [];
+
 
         const allDogsAPI = resultAPI.data.map(dog => {
             return {
                 id: dog.id,
                 name: dog.name,
-                weight: dog.weight.metric,
+                weight: (dog.weight.metric.length < 3) ? `${dog.weight.metric} - ${dog.weight.metric} kg` : `${dog.weight.metric}`,
                 image: dog.image.url,
                 temperament: dog.temperament
             };
@@ -25,6 +30,7 @@ router.get('/', async(req, res, next) => {
 
         const allDogsBD = resultBD.map(dog => {
 
+            //* Array de temperaments a string de temperaments
             const arrTemperaments = dog.temperaments.map(temp => {
                 return temp.name;
             })
@@ -42,7 +48,7 @@ router.get('/', async(req, res, next) => {
 
         let allDogs = [...allDogsAPI, ...allDogsBD];
 
-        //* FILTRO POR QUERY 
+        //* FILTRO POR RAZA
         if (name) {
             dogsByName = allDogs.filter((dog) => {
                 let dogName = dog.name.toLowerCase();
@@ -53,36 +59,49 @@ router.get('/', async(req, res, next) => {
             return res.status(200).json(dogsByName);
         }
 
+        //* FILTRO POR TEMPERAMENTO
+        if (temperament) {
+            dogsByTemperament = allDogs.filter((dog) => {
+                console.log('Lista de Temperamentos', dog.temperament);
+                let temperamentInDog = (dog.temperament === undefined) ? '' : dog.temperament.toLowerCase();
+                let temperamentLC = temperament.toLowerCase();
+                return temperamentInDog.includes(temperamentLC);
+            });
+
+            return res.status(200).json(dogsByTemperament);
+        }
+
         //* ALL DOGS
         return res.status(200).json(allDogs);
         // return res.status(200).json(resultBD);
 
     } catch (error) {
-        return res.send({ msg: error.parent.detail });
+        // return res.send({ msg: error.parent.detail });
+        next(error);
     }
 });
 
-router.get('/:id', async(req, res) => {
+router.get('/:id', async(req, res, next) => {
     const { id } = req.params;
 
     try {
         const resultAPI = await axios.get('https://api.thedogapi.com/v1/breeds');
 
-        const dogFounded = resultAPI.data.find(dog => {
+        const dogAPI = resultAPI.data.find(dog => {
             return dog.id === Number(id);
         });
 
-        if (dogFounded) {
+        if (dogAPI) {
 
-            const dog = [dogFounded].map(dog => {
+            const dog = [dogAPI].map(dog => {
                 return {
                     id: dog.id,
                     name: dog.name,
-                    height: dog.height.metric,
-                    weight: dog.weight.metric,
+                    height: `${dog.height.metric} cm`,
+                    weight: `${dog.weight.metric} kg`,
                     life_span: dog.life_span,
                     image: dog.image.url,
-                    // temperament: dog.temperament
+                    temperament: dog.temperament
                 };
             });
 
@@ -90,39 +109,54 @@ router.get('/:id', async(req, res) => {
         }
 
         //******************************************** */
-        const resultBD = await Dog.findOne({
-            where: {
-                id: id
-            },
+        const resultBD = await Dog.findByPk(id, {
             include: Temperament
         });
 
         if (resultBD) {
-            return res.status(200).json([resultBD]);
+
+            const dog = [resultBD].map(dog => {
+                const arrTemperaments = resultBD.temperaments.map(temp => {
+                    return temp.name;
+                })
+                let strTemperaments = arrTemperaments.toString();
+
+                return {
+                    id: dog.id,
+                    name: dog.name,
+                    height: dog.height,
+                    weight: dog.weight,
+                    life_span: dog.life_span,
+                    image: dog.image,
+                    temperament: strTemperaments
+                };
+            })
+
+            return res.status(200).json(dog);
         }
 
-        return res.send('No se encuentra el id');
+        return res.status(404).json({ msg: 'No se encuentra el id' });
 
     } catch (error) {
-        return res.send({ msg: error.parent.detail });
+        next(error);
     }
 });
 
-router.post('/', async(req, res) => {
+router.post('/', async(req, res, next) => {
     const { name, height, weight, life_span, image, temperament } = req.body;
 
     try {
         const dogCreated = await Dog.create({ name, height, weight, life_span, image });
-
-        temperament.forEach(async(obj) => {
-            let temperament = await Temperament.findByPk(obj.id);
-            await dogCreated.addTemperament(temperament);
+        console.log(temperament)
+        temperament.forEach(async(objTemperament) => {
+            let temperamentFounded = await Temperament.findByPk(objTemperament.id);
+            await dogCreated.addTemperament(temperamentFounded);
         });
 
         return res.status(201).send([dogCreated]);
 
     } catch (error) {
-        return res.send({ msg: error.parent.detail });
+        next(error);
         // return res.status(400).send({ msg: error });
     }
 })
