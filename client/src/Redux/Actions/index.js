@@ -1,11 +1,14 @@
 import axios from 'axios';
 
+
 export const GET_ALL_DOGS = 'GET_ALL_DOGS';
 export const SEARCH_DOGS_BY_NAME = 'GET_DOGS_BY_NAME';
 export const FILTER_DOGS_BY_PROPERTY = 'FILTER_DOGS_BY_PROPERTY';
 export const GET_DOG_BY_ID = 'GET_DOG_BY_ID';
 export const ORDER_DOGS = 'ORDER_DOGS';
 export const RESET_DOG_ID = 'RESET_DOG_ID';
+export const SET_ERROR = 'SET_ERROR';
+export const SET_MESSAGE = 'SET_MESSAGE';
 
 export const GET_ALL_TEMPERAMENTS = 'GET_ALL_TEMPERAMENTS';
 
@@ -17,36 +20,57 @@ export const INCREASE_PAGE = 'INC_PAGE';
 export const DECREASE_PAGE = 'DEC_PAGE';
 export const SELECT_PAGE = 'SEL_PAGE';
 
-// export async function getAllBreeds() {
-//     const allBreeds = await axios.get('http://localhost:3001/api/dogs');
+const API_URL = process.env.REACT_APP_API_URL;
 
-// }
 
 export const getAllDogs = () => {
     return async function(dispatch) {
-        const allDogs = await axios.get('http://localhost:5000/api/dogs');
+        try {
+            const allDogs = await axios.get(`${API_URL}/dogs`);
 
-        return dispatch({
-            type: GET_ALL_DOGS,
-            payload: allDogs.data
-        })
+            console.log('Promise', allDogs.data)
+            return dispatch({
+                type: GET_ALL_DOGS,
+                payload: allDogs.data
+            })
+        } catch (error) {
+            return dispatch({
+                type: SET_ERROR,
+                payload: error
+            })
+        }
     }
 };
 
 export const searchDogsByName = (name) => {
     return async function(dispatch) {
-        const dogsByName = await axios.get(`http://localhost:5000/api/dogs?name=${name}`);
+        try {
+            const dogsByName = await axios.get(`${API_URL}/dogs?name=${name}`);
 
-        return dispatch({
-            type: SEARCH_DOGS_BY_NAME,
-            payload: dogsByName.data
-        })
+            if (Object.keys(dogsByName.data).includes('msg')) {
+                return dispatch({
+                    type: SET_MESSAGE,
+                    payload: dogsByName.data
+                })
+            }
+
+            return dispatch({
+                type: SEARCH_DOGS_BY_NAME,
+                payload: dogsByName.data
+            })
+        } catch (error) {
+            return dispatch({
+                type: SET_ERROR,
+                payload: error
+            })
+        }
+
     }
 };
 
 export const getDogByID = (id) => {
     return async function(dispatch) {
-        const dogByID = await axios.get(`http://localhost:5000/api/dogs/${id}`);
+        const dogByID = await axios.get(`${API_URL}/dogs/${id}`);
 
         return dispatch({
             type: GET_DOG_BY_ID,
@@ -63,16 +87,23 @@ export const orderDogs = ({ typeOrder, propertyName }) => {
     }
 };
 
-export const filterDogs = ({ name, temperament }) => {
-    return async function(dispatch) {
-        const filterDogsByProperty = await axios.get(`http://localhost:5000/api/dogs?name=${name}&temperament=${temperament}`);
+// export const filterDogs = ({ name, temperament }) => {
+//     return async function(dispatch) {
+//         const filterDogsByProperty = await axios.get(`${API_URL}/dogs?name=${name}&temperament=${temperament}`);
 
-        return dispatch({
-            type: FILTER_DOGS_BY_PROPERTY,
-            payload: filterDogsByProperty.data
-        })
+//         return dispatch({
+//             type: FILTER_DOGS_BY_PROPERTY,
+//             payload: filterDogsByProperty.data
+//         })
+//     }
+// };
+
+export const filterDogs = ({ name, temperament }) => {
+    return {
+        type: FILTER_DOGS_BY_PROPERTY,
+        payload: { name, temperament }
     }
-};
+}
 
 export const resetDogID = () => {
     return ({
@@ -85,32 +116,42 @@ export const resetDogID = () => {
 export const createDog = (dog) => {
     return async function(dispatch) {
         const { name, height, weight, life_span, image, temperament } = dog;
-        const dogCreated = await axios.post('http://localhost:5000/api/dogs', {
-            name,
-            height,
-            weight,
-            life_span,
-            image,
-            temperament
-        });
+        try {
+            const dogCreatedMessage = await axios.post(`${API_URL}/dogs`, {
+                name,
+                height,
+                weight,
+                life_span,
+                image,
+                temperament
+            });
 
-        console.log(dogCreated.data)
+            console.log('Promise', dogCreatedMessage.data)
 
-        return dispatch({
-            type: CREATE_DOG,
-            // payload: allTemperaents.data
-        })
+            return dispatch({
+                type: CREATE_DOG,
+                payload: dogCreatedMessage.data
+            })
+        } catch (error) {
+            return dispatch({
+                type: SET_ERROR,
+                payload: error
+            })
+        }
     }
 };
 
 export const getAllTemperaments = () => {
     return async function(dispatch) {
-        const allTemperaments = await axios.get('http://localhost:5000/api/temperament');
-        // console.log(allTemperaments.data)
-        return dispatch({
-            type: GET_ALL_TEMPERAMENTS,
-            payload: allTemperaments.data
-        })
+        try {
+            const allTemperaments = await axios.get(`${API_URL}/temperament`);
+            return dispatch({
+                type: GET_ALL_TEMPERAMENTS,
+                payload: allTemperaments.data
+            })
+        } catch (error) {
+            return error;
+        }
     }
 };
 
@@ -130,5 +171,13 @@ export const selPage = (page) => {
     return ({
         type: SELECT_PAGE,
         payload: page
+    })
+}
+
+export const setError = (error) => {
+    console.log('error in actions', error)
+    return ({
+        type: SET_ERROR,
+        payload: error
     })
 }

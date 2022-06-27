@@ -32,7 +32,7 @@ router.get('/', async(req, res, next) => {
 
             //* Array de temperaments a string de temperaments
             const arrTemperaments = dog.temperaments.map(temp => {
-                return temp.name;
+                return ` ${temp.name}`;
             })
             let strTemperaments = arrTemperaments.toString();
 
@@ -56,6 +56,10 @@ router.get('/', async(req, res, next) => {
                 return dogName.includes(nameLC);
             });
 
+            if (dogsByName.length === 0) {
+                return res.json({ msg: 'No se encontro la raza que buscabas' })
+            }
+
             return res.status(200).json(dogsByName);
         }
 
@@ -72,7 +76,7 @@ router.get('/', async(req, res, next) => {
         }
 
         //* ALL DOGS
-        return res.status(200).json(allDogs);
+        return res.json(allDogs);
         // return res.status(200).json(resultBD);
 
     } catch (error) {
@@ -117,7 +121,7 @@ router.get('/:id', async(req, res, next) => {
 
             const dog = [resultBD].map(dog => {
                 const arrTemperaments = resultBD.temperaments.map(temp => {
-                    return temp.name;
+                    return ` ${temp.name}`;
                 })
                 let strTemperaments = arrTemperaments.toString();
 
@@ -135,7 +139,7 @@ router.get('/:id', async(req, res, next) => {
             return res.status(200).json(dog);
         }
 
-        return res.status(404).json({ msg: 'No se encuentra el id' });
+        return res.json({ msg: 'No se encuentra el id' });
 
     } catch (error) {
         next(error);
@@ -153,10 +157,11 @@ router.post('/', async(req, res, next) => {
             await dogCreated.addTemperament(temperamentFounded);
         });
 
-        return res.status(201).send([dogCreated]);
+        // return res.status(201).send([dogCreated]);
+        return res.send({ msg: 'Raza creada con exito' });
 
     } catch (error) {
-        next(error);
+        return next(error);
         // return res.status(400).send({ msg: error });
     }
 })

@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import Search from "../Search/Search";
 import Card from '../Card/Card';
 import Paginator from '../Pagination/Paginator'
-import '../Slider/Slider.css';
+import '../Home/Home.css';
 
 import {connect} from 'react-redux';
 import { getAllDogs, getAllTemperaments} from "../../Redux/Actions";
+import Error from "../Error/Error";
+import Message from "../Message/Message";
 
 
 
@@ -46,6 +48,7 @@ export class Home extends Component {
     }
 
     render() {
+        console.log(this.props.message)
         const SIZE = 8;
         let total = this.props.dogs?.length || 0;
         let page = this.props.count;
@@ -59,14 +62,13 @@ export class Home extends Component {
             max = pages[page][1];
         }
 
-        console.log(total)
-        console.log(page)
-
         return (
+            // console.log('Dogs home', this.props.dogs),
             <div>
                 <Search />
-                <div className='container-slider'>
-                    {this.props.dogs?.map(dog => 
+                <div className='container-slider-home'>
+                    
+                    {(this.props.message.hasOwnProperty('msg')) ? <Message message={this.props.message.msg}/>: this.props.dogs?.map(dog => 
                         <Card 
                             key={dog.id} 
                             id={dog.id}
@@ -77,6 +79,8 @@ export class Home extends Component {
                         />
                     ).slice(min, max)
                     }
+                    {<Error error={this.props.error} state={Object.entries(this.props.error).length > 0 ? true : false}/>}
+                    
                 </div>
                 <Paginator pageMin={min + 1} pageMax={max} total={total} pages={pages} />
             </div>
@@ -87,8 +91,9 @@ export class Home extends Component {
 export const mapStateToProps = function(state){
     return{
         dogs: state.dogs,
-    //   temperaments: state.temperaments,
-        count: state.count
+        error: state.error,
+        count: state.count,
+        message: state.message
     }
 };
 

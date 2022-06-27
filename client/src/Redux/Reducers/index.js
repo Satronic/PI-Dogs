@@ -11,7 +11,9 @@ import {
     DECREASE_PAGE,
     SELECT_PAGE,
     GET_ALL_TEMPERAMENTS,
-    RESET_DOG_ID
+    RESET_DOG_ID,
+    SET_ERROR,
+    SET_MESSAGE
 } from "../Actions";
 
 // const pages = {
@@ -28,7 +30,9 @@ const initialState = {
     dogs: [],
     dogId: [],
     count: 1,
-    temperaments: []
+    temperaments: [],
+    message: {},
+    error: {}
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -36,34 +40,43 @@ const rootReducer = (state = initialState, action) => {
         case GET_ALL_DOGS:
             return {
                 ...state,
-                dogs: action.payload
+                dogs: action.payload,
+                message: {}
             }
 
         case SEARCH_DOGS_BY_NAME:
             return {
                 ...state,
                 dogs: action.payload,
-                count: 1
+                count: 1,
+                message: {}
             }
 
         case GET_DOG_BY_ID:
             return {
                 ...state,
-                dogId: action.payload
+                dogId: action.payload,
+                message: {}
             }
 
         case ORDER_DOGS:
             console.log('order in reducer', action.payload)
-            const array = [...state.dogs]
+            let array = [...state.dogs]
+            console.log('array dogs', array)
             return {
                 ...state,
                 dogs: orderAlphabetically(array, action.payload.typeOrder, action.payload.propertyName)
             }
 
         case FILTER_DOGS_BY_PROPERTY:
+            let dogByTemperament = [...state.dogs].filter(dog => {
+                if (dog.temperament === undefined) return false;
+                return dog.temperament.includes(action.payload.temperament)
+            })
             return {
                 ...state,
-                dogs: action.payload
+                count: 1,
+                dogs: dogByTemperament
             }
 
         case RESET_DOG_ID:
@@ -75,7 +88,8 @@ const rootReducer = (state = initialState, action) => {
         case CREATE_DOG:
             return {
                 ...state,
-                dogs: state.dogs
+                dogs: state.dogs,
+                message: action.payload
             }
 
         case GET_ALL_TEMPERAMENTS:
@@ -85,9 +99,10 @@ const rootReducer = (state = initialState, action) => {
             }
 
         case INCREASE_PAGE:
+            console.log(state.count)
             return {
                 ...state,
-                count: (state.count * 8 > state.dogs.length) ? state.count : state.count + 1
+                count: (state.count * 8 >= state.dogs.length) ? state.count : state.count + 1
             }
 
         case DECREASE_PAGE:
@@ -101,6 +116,22 @@ const rootReducer = (state = initialState, action) => {
                 ...state,
                 count: Number(action.payload)
             }
+
+        case SET_ERROR:
+            console.log('error in reducer', action.payload)
+            return {
+                ...state,
+                error: action.payload
+            }
+
+        case SET_MESSAGE:
+            return {
+                ...state,
+                message: action.payload,
+                dogs: [],
+                count: 1
+            }
+
 
         default:
             return state;

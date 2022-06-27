@@ -4,32 +4,36 @@
 }
 
 .card {
-    background-color: antiquewhite;
-    /* box-shadow: 1px 1px 15px white; */
+    background-color: lightyellow;
+    box-shadow: 1px 1px 3px white, -1px -1px 3px white;
     border: 2px solid green;
     border-radius: 6px;
     width: 23%;
-    height: 170px;
-    margin: 5px;
+    height: 195px;
+    margin: 2px 3px;
     cursor: pointer;
     /* padding: 1px; */
 }
 
 .card:hover {
     box-shadow: 1px 1px 15px orangered;
-    transform: scale(1.1);
+    transform: scale(1.05);
     border: 2px solid orangered;
 }
 
 .card-image {
-    width: 100px;
-    height: 75px;
+    width: 120px;
+    height: 85px;
+    border-radius: 6px;
+    box-shadow: 1px 1px 5px rgb(51, 51, 51), -1px -1px 5px rgb(51, 51, 51);
+    border: 2px solid white;
+    margin: 3px 0px 0px 0px;
 }
 
 .card-content {
-    background-color: #A5D6A7;
+    background-color: rgba(255, 69, 0, 0.3);
     border-radius: 6px;
-    height: 52% !important;
+    height: 50% !important;
 }
 
 .card-content-title {

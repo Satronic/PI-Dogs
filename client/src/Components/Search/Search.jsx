@@ -1,15 +1,16 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+// import React, { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import '../Search/Search.css';
-
 import { orderDogs, searchDogsByName, filterDogs } from "../../Redux/Actions";
 
+// import Message from "../Message/Message";
 
-//NO CAMBIEN EL CLASS COMPONENT A FUNCTIONAL COMPONENT PORQUE SINO LOS TEST NO VAN A CORRER!!!
+
 export default function Search () {
     const dispatch = useDispatch();
     const temperaments = useSelector(state => state.temperaments);
+    // const handleError = useErrorHandler();
     // const dogs = useSelector(state => state.dogs);
 
 
@@ -28,13 +29,15 @@ export default function Search () {
     
     function onSearch() {
         // e.prevent.default()
-        dispatch(searchDogsByName(searchState.searchInput));
+        // dispatch(searchDogsByName(searchState.searchInput));
+        dispatch(searchDogsByName(searchState.searchInput))
+        // .catch(error => dispatch(setError(error)));
     }
     
     //* ORDER SECTION *//
     const [order, setOrder] = useState({
-        typeOrder: 'asc',
-        propertyName: 'name'
+        typeOrder: '',
+        propertyName: ''
     })
 
     function onSelectProperty(event){
@@ -42,8 +45,8 @@ export default function Search () {
         let index = select.selectedIndex;
         // let name = select.options[index].name;
         let value = select.options[index].value;
-
-        setOrder({
+        console.log('Propiedad seleccionada: ' + value)
+        return setOrder({
             ...order,
             propertyName: value
         })
@@ -59,14 +62,14 @@ export default function Search () {
             ...order,
             [name]: value
         })
-        dispatch(orderDogs(order));
-        // console.log('order in search', order);
     }
 
-    // useEffect(()=>{
-    //     dispatch(orderDogs(order));
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [order])
+    useEffect(()=>{
+        dispatch(orderDogs(order));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [order.typeOrder])
+
+
     // //* END ORDER *//
 
 
@@ -86,13 +89,6 @@ export default function Search () {
     function onFilter() {
         dispatch(filterDogs(filter));
     }
-
-    // useEffect(()=>{
-    //     dispatch(filterDogs(filter));
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [filter])
-    // //* END FILTER *//
-
     
 
     return (
@@ -111,8 +107,17 @@ export default function Search () {
             </div>
 
             <div className="container-filter">
+                {/* <select className='filter-input' name="breed" onChange={onChangeFilter}>
+                    <option value="default">Filtrar por raza:</option>
+                    {temperaments.map(temperament => 
+                    <option 
+                        key={temperament.id} 
+                        value={temperament.name}
+                            >{temperament.name}
+                    </option>)}
+                </select> */}
                 <select className='filter-input' name="temperament" onChange={onChangeFilter}>
-                    <option value="default">Filtrar por: ,</option>
+                    <option value="default">Filtrar por temperamento:</option>
                     {temperaments.map(temperament => 
                     <option 
                         key={temperament.id} 
@@ -120,7 +125,12 @@ export default function Search () {
                             >{temperament.name}
                     </option>)}
                 </select>
-                <span className="material-symbols-outlined" onClick={onFilter}>filter_alt</span>
+                <button 
+                    className="material-symbols-outlined" 
+                    onClick={onFilter}
+                    title='Filtrar'
+                    >filter_alt
+                </button>
             </div>
 
             <div className="container-order">

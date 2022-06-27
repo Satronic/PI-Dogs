@@ -6,7 +6,8 @@
 
 .container-search-bar {
     /* background-color: rgba(255, 165, 0, 0.8); */
-    background-color: #A5D6A7;
+    /* background-color: green; */
+    background-image: linear-gradient(0deg, yellowgreen 0%, #4CAF50 15%, green 85%, yellowgreen 100%);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -14,8 +15,8 @@
     border: 2px solid green;
     border-radius: 6px;
     width: 70%;
-    margin: 10px auto;
-    padding: 10px;
+    margin: 5px auto;
+    padding: 6px;
 }
 
 .container-search,
@@ -32,11 +33,13 @@
     border: 1px solid orangered;
     border-radius: 6px;
     font-size: 16px;
-    width: 250px;
+    width: 150px;
 }
 
 .search-button {
-    background-color: orangered;
+    /* background-color: orangered; */
+    box-shadow: 1px 1px 3px rgb(51, 51, 51), -1px -1px 3px rgb(51, 51, 51);
+    background-image: linear-gradient(0deg, white 0%, orangered 10%, orangered 90%, white 100%);
     border: 1px solid orangered;
     border-radius: 6px;
     color: white;
@@ -55,12 +58,12 @@
 
 .filter-input,
 .order-input {
-    margin: 0;
+    margin: 0 5px;
     padding: 5px;
     border: 1px solid orangered;
     border-radius: 6px;
     font-size: 16px;
-    width: 150px;
+    width: 130px;
 }
 
 .filter-input:active,
@@ -70,20 +73,24 @@
 }
 
 .material-symbols-outlined {
-    background-color: orangered;
+    /* background-color: orangered;
+    box-shadow: 1px 1px 3px rgb(200, 255, 200), -1px -1px 3px rgb(200, 255, 200); */
+    box-shadow: 1px 1px 3px rgb(51, 51, 51), -1px -1px 3px rgb(51, 51, 51);
+    background-image: linear-gradient(0deg, white 0%, orangered 10%, orangered 90%, white 100%);
     border: 1px solid orangered;
     border-radius: 6px;
     color: white;
     font-size: 20px;
     width: 40px;
-    height: 20px;
+    height: 30px;
     margin-left: 10px;
     padding: 4px;
     cursor: pointer;
 }
 
 .material-symbols-outlined:hover {
-    background-color: white;
-    border: 2px solid orangered;
-    color: orangered;
+    box-shadow: 1px 1px 3px green, -1px -1px 3px green;
+    background-image: linear-gradient(0deg, white 0%, orangered 10%, orangered 90%, white 100%);
+    border: 2px solid green;
+    color: white;
 }

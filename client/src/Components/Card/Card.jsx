@@ -9,7 +9,7 @@ const Card = ({id, name, image, weight, temperament})=> {
     return (
 
         <div className='card'>
-                <Link className='card-link' to={`/dog/${id}`}>
+                <Link className='card-link' to={`/app/dog/${id}`}>
                     <img className='card-image' src={image} alt="" />
                     <div className='card-content' >
                         <h4 className="card-content-title">{name}</h4>

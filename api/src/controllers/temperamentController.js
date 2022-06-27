@@ -40,7 +40,6 @@ async function getAllTemperaments() {
         console.log({ msg: error });
 
     }
-
 }
 
 module.exports = getAllTemperaments;

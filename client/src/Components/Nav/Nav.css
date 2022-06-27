@@ -1,7 +1,12 @@
 .container-main {
     /* background-color: rgba(255, 245, 157, 1); */
-    background-color: #FCF3CF;
-    border-bottom: 2px solid green;
+    background-color: lightyellow;
+    /* background-image: linear-gradient(0deg, lightgreen 0%, lightyellow 10%, lightyellow 90%, lightgreen 100%); */
+    box-shadow: 1px 1px 10px white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 2px solid green;
     margin: 0;
     padding: 0;
     /* height: 80px; */
@@ -17,14 +22,16 @@
     gap: 0px 10px;
 }
 
-img {
+.logo-nav {
     width: 60px;
 }
 
 h1 {
     color: green;
-    margin: 0;
+    margin: 0 50px 0 0;
     padding: 0;
+    text-shadow: 1px 1px 1px rgb(255, 255, 0), -1px -1px 1px rgb(255, 255, 0), 2px 2px 3px rgb(0, 0, 0);
+    letter-spacing: 2px;
 }
 
 .nav-link-unselected {
@@ -45,6 +52,8 @@ h1 {
 
 .nav-link {
     background-color: orangered;
+    box-shadow: 1px 1px 3px rgb(51, 51, 51), -1px -1px 3px rgb(51, 51, 51);
+    background-image: linear-gradient(0deg, white 0%, orangered 10%, orangered 90%, white 100%);
     border-radius: 6px;
     color: white;
     font-weight: 600;
